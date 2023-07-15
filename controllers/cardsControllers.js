@@ -1,8 +1,6 @@
 const Card = require('../models/cardScheme');
 const User = require('../models/userScheme');
 
-const errorHandle = require('../utils/utils')
-
 /*  Обработка GET запроса /cards  */
 const getCards = (req, res) => {
   Card.find({})
@@ -14,7 +12,7 @@ const getCards = (req, res) => {
       res.status(200).send(cards);
     })
     .catch((err) => {
-      errorHandle
+      res.status(500).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
     })
 }
 
@@ -27,7 +25,7 @@ const createCard = (req, res) => {
       res.status(200).send(card);
     })
     .catch((err) => {
-      errorHandle
+      res.status(500).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
     })
 }
 
@@ -43,7 +41,7 @@ const deleteCard = (req, res) => {
       res.status(200).send(card);
     })
     .catch((err) => {
-      errorHandle
+      res.status(500).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
     })
 }
 
@@ -62,11 +60,11 @@ const likeCard = (req, res) => {
       res.status(200).send(card);
     })
     .catch((err) => {
-      errorHandle
+      res.status(500).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
     })
     })
     .catch((err) => {
-      errorHandle
+      res.status(500).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
     })
 }
 
@@ -84,11 +82,11 @@ const unlikeCard = (req, res) => {
         res.status(200).send(card)
       })
       .catch((err) => {
-        errorHandle
+        res.status(500).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
       })
     })
     .catch((err) => {
-      errorHandle
+      res.status(500).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
     })
 }
 

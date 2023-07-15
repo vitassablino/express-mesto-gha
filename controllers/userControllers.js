@@ -1,5 +1,4 @@
 const User = require('../models/userScheme');
-const errorHandle = require('../utils/utils')
 
 /* Обработка GET запроса /users */
 const getUsers = (req, res) => {
@@ -12,7 +11,7 @@ const getUsers = (req, res) => {
     res.status(200).send(users);
   })
   .catch((err) => {
-    errorHandle
+    res.status(500).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
   })
 };
 
@@ -27,11 +26,11 @@ const getUserById = (req, res) => {
     res.status(200).send(user);
   })
   .catch((err) => {
-    errorHandle
+    res.status(500).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
   })
 }
 
-/* Обработка POST запроса /users/:userID */
+/* Обработка POST запроса /users */
 const createUser = (req, res) => {
   const {name, about, avatar} = req.body;
   User.create({ name, about, avatar })
@@ -39,7 +38,7 @@ const createUser = (req, res) => {
       res.status(200).send(user);
     })
     .catch((err) => {
-      errorHandle
+      res.status(500).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
     })
 }
 
@@ -58,7 +57,7 @@ const updateUser = (req, res) => {
     res.status(200).send(user);
   })
   .catch((err) => {
-    errorHandle
+    res.status(500).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
   })
 }
 
@@ -75,7 +74,7 @@ const updateAvatar = (req, res) => {
     res.status(200).send(user);
   })
   .catch((err) => {
-    errorHandle
+    res.status(500).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
   })
 }
 
