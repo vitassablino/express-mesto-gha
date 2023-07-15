@@ -35,7 +35,7 @@ const deleteCard = (req, res) => {
   Card.findByIdAndRemove(CardId)
     .then((card) => {
       if (!card) {
-        res.status(404).send({message: "Карточки с данным ID не обнаружено"});
+        res.status(404).send({message: "Произошла ошибка: карточка с указанным ID не обнаружена"});
         return;
       }
       res.status(200).send(card);
@@ -83,10 +83,6 @@ const unlikeCard = (req, res) => {
         {new: true}
       )
       .then((card) => {
-        if (!card) {
-        res.status(404).send({message: `Произошла ошибка: карточка с указанным ID не обнаружена`})
-        return;
-      }
         res.status(200).send(card);
       })
       .catch((err) => {
