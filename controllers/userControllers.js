@@ -59,7 +59,8 @@ const updateUser = (req, res) => {
   User.findByIdAndUpdate(
     {_id : id},
     {name: newName, about: newAbout}, //перечень обновляемых данных
-    {new: true} //возврат новой копии
+    {new: true, //возврат новой копии
+    runValidators: true} //Включение валидации
   )
   .then((user) => {
     res.status(200).send(user);
@@ -77,6 +78,8 @@ const updateAvatar = (req, res) => {
   User.findByIdAndUpdate(
     {_id : id},
     {avatar: newAvatar},
+    {new: true, //возврат новой копии
+    runValidators: true} //Включение валидации
   )
   .then((user) => {
     res.status(200).send(user);
