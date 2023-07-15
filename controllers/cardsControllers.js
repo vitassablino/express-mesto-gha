@@ -49,7 +49,7 @@ const deleteCard = (req, res) => {
 /*  Обработка PUT запроса /cards/:cardId/likes  */
 const likeCard = (req, res) => {
   const CardId = req.params.cardId;
-  User.findById(CardId)
+  User.findById(req.user._id)
     .then((user) => {
     Card.findByIdAndUpdate(
       {_id: cardId},
@@ -71,7 +71,7 @@ const likeCard = (req, res) => {
 /*  Обработка DELETE запроса /cards/:cardId/likes  */
 const unlikeCard = (req, res) => {
   const CardId = req.params.cardId;
-  User.findById(CardId)
+  User.findById(req.user._id)
     .then((user) => {
       Card.findByIdAndUpdate(
         {_id: cardId},
