@@ -66,7 +66,7 @@ const updateUser = (req, res) => {
     res.status(200).send(user);
   })
   .catch((err) => {
-    res.status(500).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+    res.status(400).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
   })
 }
 
@@ -85,7 +85,7 @@ const updateAvatar = (req, res) => {
     res.status(200).send(user);
   })
   .catch((err) => {
-    res.status(500).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+    res.status(400).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
   })
 }
 

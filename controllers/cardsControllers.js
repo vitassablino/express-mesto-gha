@@ -25,7 +25,7 @@ const createCard = (req, res) => {
       res.status(200).send(card);
     })
     .catch((err) => {
-      res.status(500).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+      res.status(400).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
     })
 }
 
