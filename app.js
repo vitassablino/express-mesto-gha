@@ -17,16 +17,6 @@ mongoose.connect(mestodb)
 /* Подключение к событию ошибки */
 db.on('error', console.error.bind(console, 'ошибка подключения к mestoDB'))
 
-app.get('/', (req, res) => {
-  res.send(
-        `<html>
-        <body>
-            <p>Ответ на сигнал из далёкого космоса1111</p>
-        </body>
-        </html>`
-    );
-});
-
 app.use(bodyParser.json()); // настройка парсера для приёма JSON
 
 /* Мидлвара добавления user в каждый запрос */
