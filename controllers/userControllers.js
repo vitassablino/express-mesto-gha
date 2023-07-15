@@ -58,8 +58,8 @@ const updateUser = (req, res) => {
 
   User.findByIdAndUpdate(
     {_id : id},
-    {name: newName},
-    {about: newAbout},
+    {name: newName, about: newAbout}, //перечень обновляемых данных
+    {new: true} //возврат новой копии
   )
   .then((user) => {
     res.status(200).send(user);
