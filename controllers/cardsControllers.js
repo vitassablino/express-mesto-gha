@@ -79,15 +79,15 @@ const unlikeCard = (req, res) => {
     .then((user) => {
       Card.findByIdAndUpdate(
         {_id: CardId},
-        {$pull: {likes: user}},
+        {$pull: {likes: user.id}},
         {new: true}
       )
       .then((card) => {
         if (!card) {
-        res.status(400).send({message: `Произошла ошибка: карточка с указанным ID не обнаружена`})
+        res.status(404).send({message: `Произошла ошибка: карточка с указанным ID не обнаружена`})
         return;
       }
-        res.status(200).send(card)
+        res.status(200).send(card);
       })
       .catch((err) => {
         res.status(400).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
