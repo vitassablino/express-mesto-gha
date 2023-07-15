@@ -5,7 +5,7 @@ const getUsers = (req, res) => {
   User.find({})
   .then((users) => {
     if (users.length === 0) {
-      res.status(404).send({message: "Пользователи не обнаружены"});
+      res.status(400).send({message: "Пользователи не обнаружены"});
       return;
     }
     res.status(200).send(users);
