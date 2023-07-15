@@ -5,7 +5,7 @@ const getUsers = (req, res) => {
   User.find({})
   .then((users) => {
     if (users.length === 0) {
-      res.status(400).send({message: "Пользователи не обнаружены"});
+      res.status(404).send({message: "Пользователи не обнаружены"});
       return;
     }
     res.status(200).send(users);
@@ -27,7 +27,7 @@ const getUserById = (req, res) => {
   })
   .catch((err) => {
     if ( err.name === 'CastError') {
-      res.status(404).send({message: "Пользователь с данным ID не обнаружен"});
+      res.status(400).send({message: "Пользователь с данным ID не обнаружен"});
       return;
     }
     res.status(500).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
@@ -42,7 +42,7 @@ const createUser = (req, res) => {
       res.status(200).send(user);
     })
     .catch((err) => {
-      res.status(400).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+      res.status(500).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
     })
 }
 
