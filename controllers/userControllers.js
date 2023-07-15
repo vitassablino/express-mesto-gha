@@ -42,6 +42,10 @@ const createUser = (req, res) => {
       res.status(200).send(user);
     })
     .catch((err) => {
+      if (err.name === 'ValidationError') {
+        res.status(400).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+        return;
+      }
       res.status(500).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
     })
 }

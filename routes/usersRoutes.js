@@ -11,9 +11,9 @@ usersRouter.get('/users/:id', getUserById);
 usersRouter.post('/users', createUser);
 
 /* Обновление данных пользователя */
-usersRouter.patch('users/me', updateUser);
+usersRouter.patch('/users/me', updateUser);
 
 /* Обновление аватара пользователя */
-usersRouter.patch('users/me/avatar', updateAvatar);
+usersRouter.patch('/users/me/avatar', updateAvatar);
 
 module.exports = usersRouter;
