@@ -86,6 +86,10 @@ const unlikeCard = (req, res) => {
         res.status(200).send(card);
       })
       .catch((err) => {
+        if (!card) {
+          res.status(404).send({message: `Произошла ошибка: карточка с указанным ID не обнаружена`})
+          return;
+        }
         res.status(400).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
       })
     })
