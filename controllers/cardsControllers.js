@@ -5,10 +5,10 @@ const User = require('../models/userScheme');
 const getCards = (req, res) => {
   Card.find({})
     .then((cards) => {
-      if (cards.length === 0) {
+      /* if (cards.length === 0) {
         res.status(404).send({message: "Карточки не обнаружены"});
         return;
-      }
+      } */
       res.status(200).send(cards);
     })
     .catch((err) => {
