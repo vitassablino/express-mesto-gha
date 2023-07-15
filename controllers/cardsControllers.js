@@ -52,7 +52,7 @@ const likeCard = (req, res) => {
   User.findById(req.user._id)
     .then((user) => {
     Card.findByIdAndUpdate(
-      {_id: cardId},
+      {_id: CardId},
       {$addToSet: {likes: user}},
       {new: true}
     )
@@ -60,11 +60,11 @@ const likeCard = (req, res) => {
       res.status(200).send(card);
     })
     .catch((err) => {
-      res.status(500).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+      res.status(404).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
     })
     })
     .catch((err) => {
-      res.status(500).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+      res.status(400).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
     })
 }
 
@@ -74,7 +74,7 @@ const unlikeCard = (req, res) => {
   User.findById(req.user._id)
     .then((user) => {
       Card.findByIdAndUpdate(
-        {_id: cardId},
+        {_id: CardId},
         {$pull: {likes: user}},
         {new: true}
       )
@@ -82,11 +82,11 @@ const unlikeCard = (req, res) => {
         res.status(200).send(card)
       })
       .catch((err) => {
-        res.status(500).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+        res.status(404).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
       })
     })
     .catch((err) => {
-      res.status(500).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+      res.status(400).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
     })
 }
 
