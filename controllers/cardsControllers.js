@@ -1,3 +1,4 @@
+const http2 = require('http2');
 const Card = require('../models/cardScheme');
 const User = require('../models/userScheme');
 
@@ -5,14 +6,13 @@ const User = require('../models/userScheme');
 const getCards = (req, res) => {
   Card.find({})
     .then((cards) => {
-      /* if (cards.length === 0) {
-        res.status(404).send({message: "Карточки не обнаружены"});
-        return;
-      } */
-      res.status(200).send(cards);
+      if (cards.length === 0) {
+        res.send({message: "Карточки не обнаружены"});
+      }
+      res.status(http2.constants.HTTP_STATUS_OK).send(cards);
     })
     .catch((err) => {
-      res.status(500).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+      res.status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
     })
 }
 
@@ -22,10 +22,13 @@ const createCard = (req, res) => {
   const owner = req.user._id;
   Card.create({name, link, owner})
     .then((card) => {
-      res.status(200).send(card);
+      res.status(http2.constants.HTTP_STATUS_CREATED).send(card);
     })
     .catch((err) => {
-      res.status(400).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+      res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+    })
+    .catch((err) => {
+      res.status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
     })
 }
 
@@ -35,12 +38,16 @@ const deleteCard = (req, res) => {
   Card.findByIdAndRemove(CardId)
     .then((card) => {
       if (!card) {
-        res.status(404).send({ message: `Произошла ошибка:  карточка с указанным ID не обнаружена`});
+        res.status(http2.constants.HTTP_STATUS_NOT_FOUND).send({ message: `Произошла ошибка:  карточка с указанным ID не обнаружена`});
+        return;
       }
-      res.status(200).send(card);
+      res.status(http2.constants.HTTP_STATUS_OK).send(card);
     })
     .catch((err) => {
-      res.status(400).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+      res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+    })
+    .catch((err) => {
+      res.status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
     })
 }
 
@@ -57,17 +64,17 @@ const likeCard = (req, res) => {
     )
     .then((card) => {
       if (!card) {
-        res.status(404).send({message: `Произошла ошибка: карточка с указанным ID не обнаружена`})
+        res.status(http2.constants.HTTP_STATUS_NOT_FOUND).send({message: `Произошла ошибка: карточка с указанным ID не обнаружена`})
         return;
       }
-      res.status(200).send(card);
-    })
-    .catch((err) => {
-      res.status(400).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+      res.status(http2.constants.HTTP_STATUS_OK).send(card);
     })
     })
     .catch((err) => {
-      res.status(400).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+      res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+    })
+    .catch((err) => {
+      res.status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
     })
 }
 
@@ -83,17 +90,17 @@ const unlikeCard = (req, res) => {
       )
       .then((card) => {
         if (!card) {
-          res.status(404).send({message: `Произошла ошибка: карточка с указанным ID не обнаружена`})
+          res.status(http2.constants.HTTP_STATUS_NOT_FOUND).send({message: `Произошла ошибка: карточка с указанным ID не обнаружена`})
           return;
         }
-        res.status(200).send(card);
+        res.status(http2.constants.HTTP_STATUS_OK).send(card);
       })
       .catch((err) => {
-        res.status(400).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+        res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
       })
     })
     .catch((err) => {
-      res.status(400).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+      res.status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
     })
 }
 

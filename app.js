@@ -1,3 +1,4 @@
+const http2 = require('http2');
 const express = require('express');
 const mongoose = require('mongoose'); //подключение БД Монго
 const app = express(); //создание точки входа
@@ -33,7 +34,7 @@ app.use('/', cardsRoutes);
 
 
 app.all('*', (req, res) => {
- res.status(404).send({message: "Страница не найдена"})
+ res.status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({message: "Страница не найдена"})
 });
 
 

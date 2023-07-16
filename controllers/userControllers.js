@@ -1,3 +1,4 @@
+const http2 = require('http2');
 const User = require('../models/userScheme');
 
 /* Обработка GET запроса /users */
@@ -5,13 +6,12 @@ const getUsers = (req, res) => {
   User.find({})
   .then((users) => {
     if (users.length === 0) {
-      res.status(404).send({message: "Пользователи не обнаружены"});
-      return;
+      res.send({message: "Пользователи не обнаружены"});
     }
-    res.status(200).send(users);
+    res.status(http2.constants.HTTP_STATUS_OK).send(users);
   })
   .catch((err) => {
-    res.status(500).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+    res.status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
   })
 };
 
@@ -20,17 +20,17 @@ const getUserById = (req, res) => {
   User.findById(req.params.id)
   .then((user) => {
     if (!user) {
-      res.status(404).send({message: "Пользователь с данным ID не обнаружен"});
+      res.status(http2.constants.HTTP_STATUS_NOT_FOUND).send({message: "Пользователь с данным ID не обнаружен"});
       return;
     }
-    res.status(200).send(user);
+    res.status(http2.constants.HTTP_STATUS_OK).send(user);
   })
   .catch((err) => {
     if ( err.name === 'CastError') {
-      res.status(400).send({message: "Пользователь с данным ID не обнаружен"});
+      res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({message: "Пользователь с данным ID не обнаружен"});
       return;
     }
-    res.status(500).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+    res.status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
   })
 }
 
@@ -39,14 +39,14 @@ const createUser = (req, res) => {
   const {name, about, avatar} = req.body;
   User.create({ name, about, avatar })
     .then((user) => {
-      res.status(200).send(user);
+      res.status(http2.constants.HTTP_STATUS_OK).send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+        res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
         return;
       }
-      res.status(500).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+      res.status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
     })
 }
 
@@ -63,10 +63,10 @@ const updateUser = (req, res) => {
     runValidators: true} //Включение валидации
   )
   .then((user) => {
-    res.status(200).send(user);
+    res.status(http2.constants.HTTP_STATUS_OK).send(user);
   })
   .catch((err) => {
-    res.status(400).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+    res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
   })
 }
 
@@ -82,10 +82,13 @@ const updateAvatar = (req, res) => {
     runValidators: true} //Включение валидации
   )
   .then((user) => {
-    res.status(200).send(user);
+    res.status(http2.constants.HTTP_STATUS_OK).send(user);
   })
   .catch((err) => {
-    res.status(400).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+    res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+  })
+  .catch((err) => {
+    res.status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
   })
 }
 
