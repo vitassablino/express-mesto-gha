@@ -69,9 +69,10 @@ const likeCard = (req, res) => {
       }
       res.status(http2.constants.HTTP_STATUS_OK).send(card);
     })
-    })
     .catch((err) => {
       res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+      return;
+    })
     })
     .catch((err) => {
       res.status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
