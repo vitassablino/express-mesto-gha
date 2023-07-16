@@ -37,10 +37,11 @@ const deleteCard = (req, res) => {
   const CardId = req.params.cardId;
   Card.findByIdAndRemove(CardId)
     .then((card) => {
-      if (!card) {
+      /* *** */
+      /* if (!card) {
         res.status(http2.constants.HTTP_STATUS_NOT_FOUND).send({ message: `Произошла ошибка:  карточка с указанным ID не обнаружена`});
         return;
-      }
+      } */
       res.status(http2.constants.HTTP_STATUS_OK).send(card);
     })
     .catch((err) => {
