@@ -5,9 +5,9 @@ const User = require('../models/userScheme');
 const getUsers = (req, res) => {
   User.find({})
   .then((users) => {
-    if (users.length === 0) {
+    /* if (users.length === 0) {
       res.send({message: "Пользователи не обнаружены"});
-    }
+    } */
     res.status(http2.constants.HTTP_STATUS_OK).send(users);
   })
   .catch((err) => {

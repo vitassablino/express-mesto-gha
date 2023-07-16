@@ -6,9 +6,9 @@ const User = require('../models/userScheme');
 const getCards = (req, res) => {
   Card.find({})
     .then((cards) => {
-      if (cards.length === 0) {
+      /* if (cards.length === 0) {
         res.send({message: "Карточки не обнаружены"});
-      }
+      } */
       res.status(http2.constants.HTTP_STATUS_OK).send(cards);
     })
     .catch((err) => {
@@ -37,11 +37,10 @@ const deleteCard = (req, res) => {
   const CardId = req.params.cardId;
   Card.findByIdAndRemove(CardId)
     .then((card) => {
-      /* *** */
-      /* if (!card) {
+      if (!card) {
         res.status(http2.constants.HTTP_STATUS_NOT_FOUND).send({ message: `Произошла ошибка:  карточка с указанным ID не обнаружена`});
         return;
-      } */
+      }
       res.status(http2.constants.HTTP_STATUS_OK).send(card);
     })
     .catch((err) => {
