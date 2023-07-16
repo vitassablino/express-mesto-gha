@@ -34,7 +34,7 @@ app.use('/', cardsRoutes);
 
 
 app.all('*', (req, res) => {
- res.status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({message: "Страница не найдена"})
+ res.status(http2.constants.HTTP_STATUS_NOT_FOUND).send({message: "Страница не найдена"})
 });
 
 
