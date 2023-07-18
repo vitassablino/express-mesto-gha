@@ -25,11 +25,12 @@ const createCard = (req, res) => {
       res.status(http2.constants.HTTP_STATUS_CREATED).send(card);
     })
     .catch((err) => {
-      if (err.name === 'card validation failed') {
-      res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
-      return;
+      if (err.name === 'ValidationError') {
+        res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+      }
+    else {
+      res.status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
     }
-    res.status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
     })
 }
 
