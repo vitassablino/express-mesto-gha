@@ -46,10 +46,11 @@ const deleteCard = (req, res) => {
       res.status(http2.constants.HTTP_STATUS_OK).send(card);
     })
     .catch((err) => {
+      if (err.name === 'ValidationError') {
       res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
-    })
-    .catch((err) => {
-      res.status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+      } else {
+        res.status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+      }
     })
 }
 
@@ -72,12 +73,12 @@ const likeCard = (req, res) => {
       res.status(http2.constants.HTTP_STATUS_OK).send(card);
     })
     .catch((err) => {
-      res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
-      return;
+      if (err.name === 'CastError') {
+        res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+      } else {
+        res.status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+      }
     })
-    })
-    .catch((err) => {
-      res.status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
     })
 }
 
@@ -99,11 +100,12 @@ const unlikeCard = (req, res) => {
         res.status(http2.constants.HTTP_STATUS_OK).send(card);
       })
       .catch((err) => {
-        res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+        if (err.name === 'CastError') {
+          res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+        } else {
+          res.status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+        }
       })
-    })
-    .catch((err) => {
-      res.status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
     })
 }
 
