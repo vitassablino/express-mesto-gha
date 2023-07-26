@@ -37,10 +37,14 @@ const getUserById = (req, res, next) => {
 
 /* Обработка POST запроса /users */
 const createUser = (req, res, next) => {
-  const {name, about, avatar, email, password} = req.body;
-  const passwordHash = bcrypt.hash(password, 10);
-  passwordHash
-  .then((hash) => User.create({ name, about, avatar, password: hash, email}))
+  bcrypt.hash(req.body.password, 10)
+  .then((hash) => User.create({
+    email: req.body.email,
+    password: hash,
+    name: req.body.name,
+    about: req.body.about,
+    avatar: req.body.avatar,
+  }))
     .then((user) => {
       res.status(http2.constants.HTTP_STATUS_OK).send({
         name: user.name,
@@ -53,6 +57,10 @@ const createUser = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+        return;
+      }
+      if (err.code === 11000) {
+        res.status(http2.constants.HTTP_STATUS_CONFLICT).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
         return;
       }
       next(err);
@@ -126,6 +134,10 @@ const getCurrentUser = (req, res, next) => {
       res.status(http2.constants.HTTP_STATUS_OK).send(user);
     })
     .catch((err) => {
+      if (err.code === 400) {
+        res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+        return;
+      }
       next(err);
     })
 };
