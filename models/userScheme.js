@@ -52,15 +52,19 @@ userScheme.statics.findUserByCredentials = function (email, password) {
   return this.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        res.status(http2.constants.HTTP_STATUS_UNAUTHORIZED).send({ message: `Неправильные почта или пароль`});
-        return;
+        let err = new Error('Неправильные почта или пароль');
+        err.statusCode = 401;
+        return Promise.reject(err);
+
       }
 
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            res.status(http2.constants.HTTP_STATUS_UNAUTHORIZED).send({ message: `Неправильные почта или пароль`});
-            return;
+            let err = new Error('Неправильные почта или пароль');
+            err.statusCode = 401;
+            return Promise.reject(err);
+
           }
 
           return user;
