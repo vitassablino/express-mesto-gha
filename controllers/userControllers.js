@@ -114,6 +114,7 @@ const login = (req, res, next) => {
     .then((user) => {
       if (!user) {
         res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({message: 'Неверный логин или пароль'})
+        return;
       }
       const token = jwt.sign(
         { _id: user._id },
