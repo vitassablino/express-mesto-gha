@@ -41,7 +41,7 @@ app.use(bodyParser.json()); // настройка парсера для приё
 
 /* Добавление роутов */
 /* Роуты, не требующие авторицзации */
-app.use('./signin',
+app.use('/signin',
 celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
@@ -67,7 +67,6 @@ createUser);
 app.use(auth);
 app.use('/', userRoutes);
 app.use('/', cardsRoutes);
-
 
 
 app.all('*', (req, res) => {
