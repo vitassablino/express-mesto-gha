@@ -1,6 +1,7 @@
 const http2 = require('http2');
 const User = require('../models/userScheme');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 /* Обработка GET запроса /users */
 const getUsers = (req, res) => {
