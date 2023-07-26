@@ -1,5 +1,5 @@
 const rateLimit = require('express-rate-limit');
-const { errors } = require('celebrate');
+const { errors, celebrate, Joi } = require('celebrate');
 const http2 = require('http2');
 const express = require('express');
 const mongoose = require('mongoose'); //подключение БД Монго
