@@ -16,7 +16,7 @@ module.exports = (req, res, next) => {
   try {
     payload = jwt.verify(userToken, 'token-generate-key');
   } catch (err) {
-    res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({message: "Для доступа необходимо авторизироваться"});
+    res.status(http2.constants.HTTP_STATUS_UNAUTHORIZED).send({message: "Для доступа необходимо авторизироваться"});
     return;
   }
 
