@@ -41,8 +41,27 @@ app.use(bodyParser.json()); // настройка парсера для приё
 
 /* Добавление роутов */
 /* Роуты, не требующие авторицзации */
-app.use('./signin', login);
-app.use('/signup', createUser);
+app.use('./signin',
+celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required().min(8).max(30),
+  }),
+}),
+login);
+app.use('/signup',
+celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required()
+      .pattern(new RegExp('^[A-Za-z0-9]{8,30}$')),
+    name: Joi.string().min(2).max(30),
+    about: Joi.string().min(2).max(30),
+    avatar: Joi.string()
+      .regex(/^(https?:\/\/)?([\da-z.-]+).([a-z.]{2,6})([/\w.-]*)*\/?$/),
+  }),
+}),
+createUser);
 
 /* Роуты, требующие авторицзации */
 app.use(auth);
