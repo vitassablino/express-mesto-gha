@@ -37,11 +37,12 @@ const getUserById = (req, res, next) => {
 
 /* Обработка POST запроса /users */
 const createUser = (req, res, next) => {
-  const {name, about, avatar, email} = req.body;
-  bcrypt.hash(req.body.password, 10)
+  const {name, about, avatar, email, password} = req.body;
+  const passwordHash = bcrypt.hash(password, 10);
+  passwordHash
   .then((hash) => User.create({ name, about, avatar, password: hash, email}))
     .then((user) => {
-      res.status(http2.constants.HTTP_STATUS_OK).send(user);
+      res.status(http2.constants.HTTP_STATUS_OK).send(name, about, avatar, email);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
