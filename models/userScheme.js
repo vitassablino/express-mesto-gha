@@ -62,13 +62,13 @@ userScheme.statics.findUserByCredentials = function (email, password, res) {
   return this.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({message: 'Неверный логин или пароль'})
+        res.status(http2.constants.HTTP_STATUS_UNAUTHORIZED).send({message: 'Неверный логин или пароль'})
       }
 
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({message: 'Неверный логин или пароль'})
+            res.status(http2.constants.HTTP_STATUS_UNAUTHORIZED).send({message: 'Неверный логин или пароль'})
           }
 
           return user;
