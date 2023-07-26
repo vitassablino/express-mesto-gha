@@ -42,7 +42,13 @@ const createUser = (req, res, next) => {
   passwordHash
   .then((hash) => User.create({ name, about, avatar, password: hash, email}))
     .then((user) => {
-      res.status(http2.constants.HTTP_STATUS_OK).send(name, about, avatar, email);
+      res.status(http2.constants.HTTP_STATUS_OK).send({
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
+        _id: user._id,
+        email: user.email,
+      });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
