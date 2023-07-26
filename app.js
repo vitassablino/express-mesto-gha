@@ -1,3 +1,4 @@
+const rateLimit = require('express-rate-limit');
 const http2 = require('http2');
 const express = require('express');
 const mongoose = require('mongoose'); //подключение БД Монго
@@ -13,6 +14,11 @@ const errorHandler = require('./middlewares/errorHandler'); //подключен
 
 const { PORT = 3000} = process.env;
 
+const limiter = rateLimit({
+  windowMs: 20 * 60 * 1000, // за 15 минут
+  max: 1000 // можно совершить максимум 100 запросов с одного IP
+});
+
 /* Адрес БД */
 const mestodb = 'mongodb://127.0.0.1:27017/mestodb';
 /* Получение подключения */
@@ -21,7 +27,7 @@ const db = mongoose.connection;
 mongoose.connect(mestodb)
 /* Подключение к событию ошибки */
 db.on('error', console.error.bind(console, 'ошибка подключения к mestoDB'))
-
+app.use(limiter);
 app.use(bodyParser.json()); // настройка парсера для приёма JSON
 
 /* Мидлвара добавления user в каждый запрос */
