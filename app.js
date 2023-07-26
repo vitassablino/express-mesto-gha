@@ -55,8 +55,10 @@ app.all('*', (req, res) => {
  res.status(http2.constants.HTTP_STATUS_NOT_FOUND).send({message: "Страница не найдена"})
 });
 
-app.use(errorHandler);
+/* обработчик ошибок */
 app.use(errors()); // обработчик ошибок celebrate
+app.use(errorHandler);
+
 
 app.listen(PORT, () => {
   console.log(`Прослушивание порта ${PORT}`)
