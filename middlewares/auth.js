@@ -14,9 +14,9 @@ module.exports = (req, res, next) => {
   const userToken = authorization.replace('Bearer ', '');   // извлеченние токена
 
   try {
-    payload = jwt.verify(userToken, 'token-generate-key');
+    payload = jwt.verify(userToken, 'token-key');
   } catch (err) {
-    res.status(http2.constants.HTTP_STATUS_UNAUTHORIZED).send({message: "Для доступа необходимо авторизироваться"});
+    res.status(http2.constants.HTTP_STATUS_UNAUTHORIZED).send({message: "Для доступа необходимо авторизироваться!"});
     return;
   }
 

@@ -33,12 +33,12 @@ updateAvatar);
 
 /* получение информации о текущем пользователе */
 usersRouter.get('/users/me',
-celebrate({
-  params: Joi.object().keys({
-    id: Joi.string().required().hex().min(24)
-      .max(24),
+/* celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().min(2).max(30),
+    about: Joi.string().min(2).max(30),
   }),
-}),
+}), */
 getCurrentUser);
 
 module.exports = usersRouter;
