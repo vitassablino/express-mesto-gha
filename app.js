@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');  //подключение парсе�
 const userRoutes = require('./routes/usersRoutes'); //подключение роутов пользователя
 const cardsRoutes = require('./routes/cardRoutes'); //добавление роутов карточек
 
-const { createUser, login } = require('./controllers/users'); //подключение обработчиков авторизации и регистрации
+const { createUser, login } = require('./controllers/userControllers'); //подключение обработчиков авторизации и регистрации
 const auth = require('./middlewares/auth'); //подключение защиты роутов авторизацией
 const errorHandler = require('./middlewares/errorHandler'); //подключение обработчика ошибок
 
