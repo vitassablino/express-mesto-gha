@@ -5,7 +5,8 @@ module.exports = (req, res, next) => {
   const { authorization } = req.headers; // достаём авторизационный заголовок
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
-    return res.status(http2.constants.HTTP_STATUS_UNAUTHORIZED).send({message: "Для доступа необходимо авторизироваться"});
+    res.status(http2.constants.HTTP_STATUS_UNAUTHORIZED).send({message: "Для доступа необходимо авторизироваться"});
+    return;
   }
 
   let payload;
@@ -15,7 +16,8 @@ module.exports = (req, res, next) => {
   try {
     payload = jwt.verify(userToken, 'token-generate-key');
   } catch (err) {
-    return res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({message: "Для доступа необходимо авторизироваться"});
+    res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({message: "Для доступа необходимо авторизироваться"});
+    return;
   }
 
   req.user = payload;
