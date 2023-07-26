@@ -3,7 +3,7 @@ const Card = require('../models/cardScheme');
 const User = require('../models/userScheme');
 
 /*  Обработка GET запроса /cards  */
-const getCards = (req, res) => {
+const getCards = (req, res, next) => {
   Card.find({})
     .then((cards) => {
       /* if (cards.length === 0) {
@@ -12,12 +12,12 @@ const getCards = (req, res) => {
       res.status(http2.constants.HTTP_STATUS_OK).send(cards);
     })
     .catch((err) => {
-      res.status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+      next(err);
     })
 }
 
 /*  Обработка POST запроса /cards  */
-const createCard = (req, res) => {
+const createCard = (req, res, next) => {
   const {name, link} = req.body;
   const owner = req.user._id;
   Card.create({name, link, owner})
@@ -29,18 +29,22 @@ const createCard = (req, res) => {
         res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
       }
     else {
-      res.status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+      next(err);
     }
     })
 }
 
 /*  Обработка DELETE запроса /cards/:Id  */
-const deleteCard = (req, res) => {
+const deleteCard = (req, res, next) => {
   const CardId = req.params.cardId;
   Card.findByIdAndRemove(CardId)
     .then((card) => {
       if (!card) {
         res.status(http2.constants.HTTP_STATUS_NOT_FOUND).send({ message: `Произошла ошибка:  карточка с указанным ID не обнаружена`});
+        return;
+      }
+      if (card.owner.toString() !== id) {
+        res.status(http2.constants.HTTP_STATUS_FORBIDDEN).send({ message: `Вы не являетесь автором карточки. Удаление невозможно`});
         return;
       }
       res.status(http2.constants.HTTP_STATUS_OK).send(card);
@@ -49,14 +53,13 @@ const deleteCard = (req, res) => {
       if (err.name === 'CastError') {
       res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
       } else {
-        res.status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+        next(err);
       }
     })
 }
 
-
 /*  Обработка PUT запроса /cards/:cardId/likes  */
-const likeCard = (req, res) => {
+const likeCard = (req, res, next) => {
   const CardId = req.params.cardId;
   User.findById(req.user._id)
     .then((user) => {
@@ -76,14 +79,14 @@ const likeCard = (req, res) => {
       if (err.name === 'CastError') {
         res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
       } else {
-        res.status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+        next(err);
       }
     })
     })
 }
 
 /*  Обработка DELETE запроса /cards/:cardId/likes  */
-const unlikeCard = (req, res) => {
+const unlikeCard = (req, res, next) => {
   const CardId = req.params.cardId;
   User.findById(req.user._id)
     .then((user) => {
@@ -103,7 +106,7 @@ const unlikeCard = (req, res) => {
         if (err.name === 'CastError') {
           res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
         } else {
-          res.status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+          next(err);
         }
       })
     })

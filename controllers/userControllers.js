@@ -1,5 +1,6 @@
 const http2 = require('http2');
 const User = require('../models/userScheme');
+const bcrypt = require('bcryptjs');
 
 /* Обработка GET запроса /users */
 const getUsers = (req, res) => {
@@ -16,7 +17,7 @@ const getUsers = (req, res) => {
 };
 
 /* Обработка GET запроса /users/:userID */
-const getUserById = (req, res) => {
+const getUserById = (req, res, next) => {
   User.findById(req.params.id)
   .then((user) => {
     if (!user) {
@@ -30,14 +31,15 @@ const getUserById = (req, res) => {
       res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({message: "Пользователь с данным ID не обнаружен"});
       return;
     }
-    res.status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+    next(err);
   })
 }
 
 /* Обработка POST запроса /users */
-const createUser = (req, res) => {
-  const {name, about, avatar} = req.body;
-  User.create({ name, about, avatar })
+const createUser = (req, res, next) => {
+  const {name, about, avatar, email} = req.body;
+  bcrypt.hash(req.body.password, 10)
+  .then((hash) => User.create({ name, about, avatar, password: hash, email}))
     .then((user) => {
       res.status(http2.constants.HTTP_STATUS_OK).send(user);
     })
@@ -46,7 +48,7 @@ const createUser = (req, res) => {
         res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
         return;
       }
-      res.status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+      next(err);
     })
 }
 
@@ -66,12 +68,12 @@ const updateUser = (req, res) => {
     res.status(http2.constants.HTTP_STATUS_OK).send(user);
   })
   .catch((err) => {
-    res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+    next(err);
   })
 }
 
 /* Обработка PATCH запроса /users/me/avatar */
-const updateAvatar = (req, res) => {
+const updateAvatar = (req, res, next) => {
   const newAvatar = req.body.avatar;
   const id = req.user._id;
 
@@ -85,14 +87,49 @@ const updateAvatar = (req, res) => {
     res.status(http2.constants.HTTP_STATUS_OK).send(user);
   })
   .catch((err) => {
-    res.status(http2.constants.HTTP_STATUS_INTERNAL_SERVER_ERROR).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
+    next(err);
   })
 }
+
+/* Проверка введённых пояты и пароля */
+const login = (req, res, next) => {
+  const { email, password } = req.body;
+
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign(
+        { _id: user._id },
+        'some-secret-key',
+        { expiresIn: '7d' },
+      );
+
+      res.send({ token });
+    })
+    .catch((err) => {
+      next(err);
+    })
+};
+
+/* получение информации о текущем порльзователе */
+const getCurrentUser = (req, res, next) => {
+  const id = req.user._id;
+
+  User.findById(id)
+    .then((user) => {
+      res.status(http2.constants.HTTP_STATUS_OK).send(user);
+    })
+    .catch((err) => {
+      next(err);
+    })
+};
+
 
 module.exports = {
   getUsers,
   getUserById,
   createUser,
   updateUser,
-  updateAvatar
+  updateAvatar,
+  login,
+  getCurrentUser
 };
