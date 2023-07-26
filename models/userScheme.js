@@ -2,6 +2,16 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
 const http2 = require('http2');
+const { error } = require('console');
+
+class Unauthorized extends Error {
+  constructor(message) {
+    super(message);
+    this.status = 401;
+    this.name = 'Unauthorized';
+  }
+}
+
 
 const userScheme = new mongoose.Schema({
   name: {
@@ -48,23 +58,17 @@ const userScheme = new mongoose.Schema({
   }
 });
 
-userScheme.statics.findUserByCredentials = function (email, password) {
+userScheme.statics.findUserByCredentials = function (email, password, res) {
   return this.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        let err = new Error('Неправильные почта или пароль');
-        err.statusCode = 401;
-        return Promise.reject(err);
-
+        res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({message: 'Неверный логин или пароль'})
       }
 
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            let err = new Error('Неправильные почта или пароль');
-            err.statusCode = 401;
-            return Promise.reject(err);
-
+            res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({message: 'Неверный логин или пароль'})
           }
 
           return user;

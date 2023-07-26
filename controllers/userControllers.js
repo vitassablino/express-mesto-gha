@@ -110,12 +110,12 @@ const updateAvatar = (req, res, next) => {
 const login = (req, res, next) => {
   const { email, password } = req.body;
 
-  return User.findUserByCredentials(email, password)
+  return User.findUserByCredentials(email, password, res)
     .then((user) => {
-      if (!user) {
+/*       if (!user) {
         res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({message: 'Неверный логин или пароль'})
         return;
-      }
+      } */
       const token = jwt.sign(
         { _id: user._id },
         'some-secret-key',
