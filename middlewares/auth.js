@@ -5,7 +5,7 @@ module.exports = (req, res, next) => {
   const { authorization } = req.headers; // достаём авторизационный заголовок
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
-    return res.status(http2.constants.HTTP_STATUS_UNAUTHORIZED.send({message: "Для доступа необходимо авторизироваться"});
+    return res.status(http2.constants.HTTP_STATUS_UNAUTHORIZED).send({message: "Для доступа необходимо авторизироваться"});
   }
 
   let payload;
