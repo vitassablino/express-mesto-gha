@@ -1,4 +1,5 @@
 const rateLimit = require('express-rate-limit');
+const { errors } = require('celebrate');
 const http2 = require('http2');
 const express = require('express');
 const mongoose = require('mongoose'); //подключение БД Монго
@@ -55,6 +56,7 @@ app.all('*', (req, res) => {
 });
 
 app.use(errorHandler);
+app.use(errors()); // обработчик ошибок celebrate
 
 app.listen(PORT, () => {
   console.log(`Прослушивание порта ${PORT}`)
