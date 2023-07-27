@@ -76,7 +76,7 @@ const likeCard = (req, res, next) => {
       res.status(http2.constants.HTTP_STATUS_OK).send(card);
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
         res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
       } else {
         next(err);
@@ -103,7 +103,7 @@ const unlikeCard = (req, res, next) => {
         res.status(http2.constants.HTTP_STATUS_OK).send(card);
       })
       .catch((err) => {
-        if (err.name === 'CastError') {
+        if (err.name === 'ValidationError' || err.name === 'CastError') {
           res.status(http2.constants.HTTP_STATUS_BAD_REQUEST).send({ message: `Произошла ошибка: ${err.name}: ${err.message}`});
         } else {
           next(err);
