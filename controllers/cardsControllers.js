@@ -44,7 +44,7 @@ const deleteCard = (req, res, next) => {
         return;
       }
       if (card.owner.toString() !== CardId) {
-        res.status(http2.constants.HTTP_STATUS_OK).send({ message: `Вы не являетесь автором карточки. Удаление невозможно`});
+        res.status(http2.constants.HTTP_STATUS_FORBIDDEN).send({ message: `Вы не являетесь автором карточки. Удаление невозможно`});
         return;
       }
       res.status(http2.constants.HTTP_STATUS_OK).send(card);
