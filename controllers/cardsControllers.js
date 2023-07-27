@@ -43,7 +43,7 @@ const deleteCard = (req, res, next) => {
         res.status(http2.constants.HTTP_STATUS_NOT_FOUND).send({ message: `Произошла ошибка:  карточка с указанным ID не обнаружена`});
         return;
       }
-      if (card.owner.toString() !== id) {
+      if (card.owner.toString() !== CardId) {
         res.status(http2.constants.HTTP_STATUS_FORBIDDEN).send({ message: `Вы не являетесь автором карточки. Удаление невозможно`});
         return;
       }
