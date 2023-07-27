@@ -2,16 +2,6 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
 const http2 = require('http2');
-const { error } = require('console');
-
-class Unauthorized extends Error {
-  constructor(message) {
-    super(message);
-    this.status = 401;
-    this.name = 'Unauthorized';
-  }
-}
-
 
 const userScheme = new mongoose.Schema({
   name: {
