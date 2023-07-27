@@ -6,15 +6,6 @@ const { celebrate, Joi } = require('celebrate');
 /* Получение всех карточек */
 cardsRouter.get('/cards', getCards);
 
-/* Удаление карточки по ID */
-cardsRouter.delete('/cards/:cardId',
-celebrate({
-  body: Joi.object().keys({
-    cardId: Joi.string().hex().length(24).required(),
-  }),
-}),
-deleteCard);
-
 /* Создание карточки */
 cardsRouter.post('/cards',
 celebrate({
@@ -25,6 +16,15 @@ celebrate({
   }),
 }),
 createCard);
+
+/* Удаление карточки по ID */
+cardsRouter.delete('/cards/:cardId',
+celebrate({
+  body: Joi.object().keys({
+    cardId: Joi.string().hex().length(24).required(),
+  }),
+}),
+deleteCard);
 
 /* Лайк карточки */
 cardsRouter.put('/cards/:cardId/likes',
