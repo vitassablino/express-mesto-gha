@@ -37,7 +37,7 @@ const createCard = (req, res, next) => {
 /*  Обработка DELETE запроса /cards/:Id  */
 const deleteCard = (req, res, next) => {
   const userID = req.params._id;
-  Card.findByIdAndRemove(CardId)
+  Card.findByIdAndRemove(req.params.cardId)
     .then((card) => {
       if (!card) {
         res.status(http2.constants.HTTP_STATUS_NOT_FOUND).send({ message: `Произошла ошибка:  карточка с указанным ID не обнаружена`});
