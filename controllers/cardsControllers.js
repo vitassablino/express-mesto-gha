@@ -34,7 +34,7 @@ const createCard = (req, res, next) => {
     })
 }
 
-/*  Обработка DELETE запроса /cards/:Id  */
+/*  /Обработка DELETE запроса /cards/:Id  */
 const deleteCard = (req, res, next) => {
   const userID = req.params._id;
   Card.findByIdAndRemove(req.params.cardId)
