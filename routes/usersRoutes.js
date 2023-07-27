@@ -16,7 +16,14 @@ getCurrentUser);
 usersRouter.get('/users', getUsers);
 
 /* Получение пользователя по ID */
-usersRouter.get('/users/:id', getUserById);
+usersRouter.get('/users/:id',
+celebrate({
+  params: Joi.object().keys({
+    id: Joi.string().required().hex().min(24)
+      .max(24),
+  }),
+}),
+getUserById);
 
 /* Создание пользователя */
 //usersRouter.post('/users', createUser);
